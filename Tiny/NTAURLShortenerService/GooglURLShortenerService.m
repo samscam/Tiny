@@ -20,6 +20,17 @@ static NSString * GooglLongURLKey = @"longUrl";
     return [[self alloc] init];
 }
 
++ (instancetype)serviceWithAPIKey:(NSString *)apiKey{
+    return [[self alloc] initWithAPIKey:apiKey];
+}
+
+- (instancetype)initWithAPIKey:(NSString *)apiKey{
+    if ((self=[super init])){
+        _apiKey=apiKey;
+    }
+    return self;
+}
+
 #pragma mark - NTAURLShortenerService
 
 - (NSURLRequest *)URLRequestToShortenURL:(NSURL *)URL
@@ -36,8 +47,12 @@ static NSString * GooglLongURLKey = @"longUrl";
     NSMutableURLRequest *URLRequest = [NSMutableURLRequest requestWithURL:requestURL];
     [URLRequest setHTTPMethod:@"POST"];
     [URLRequest addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    
-    NSString *bodyString = [NSString stringWithFormat:@"{\"longUrl\": \"%@\"}", URLString];
+    NSString *bodyString;
+    if (_apiKey){
+        bodyString = [NSString stringWithFormat:@"{\"longUrl\": \"%@\" ,\"key\" : \"%@\"}", URLString, _apiKey];
+    } else {
+        bodyString = [NSString stringWithFormat:@"{\"longUrl\": \"%@\"}", URLString];
+    }
     [URLRequest setHTTPBody:[bodyString dataUsingEncoding:NSUTF8StringEncoding]];
     
     return URLRequest;

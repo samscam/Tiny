@@ -12,5 +12,9 @@
 @interface GooglURLShortenerService : NSObject <NTAURLShortenerService>
 
 + (instancetype)service;
++ (instancetype)serviceWithAPIKey:(NSString *)apiKey;
+- (instancetype)initWithAPIKey:(NSString *)apiKey;
+
+@property (nonatomic,readonly) NSString* apiKey;
 
 @end
